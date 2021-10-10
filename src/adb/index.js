@@ -125,12 +125,18 @@ async function text(text){
 }
 
 async function screencap(){
-    const { stdout } = await execa("adb",[
-        "exec-out",
-        "screencap",
-        // "-p",
-    ])
-    return stdout;
+    try{
+        await execa("adb",[
+            "exec-out",
+            "screencap",
+            "-p",
+            "sdcard/s.png"
+        ]);
+        await execa("adb",["pull","sdcard/s.png",path.resolve("s.png")])
+        return fs.readFileSync(path.resolve("s.png"));
+    }finally{
+        fs.rmSync(path.resolve("s.png"));
+    }
 }
 
 module.exports = {

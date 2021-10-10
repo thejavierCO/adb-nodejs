@@ -15,9 +15,7 @@ app.get("/",async (req,res,next)=>{
 
 app.get("/cap",async (req,res,next)=>{
     try{
-        res.status(200)
-        .set('Content-Type', 'image/bmp')
-        .end(await adb.screencap())
+        res.status(200).type("png").end(await adb.screencap())
     }catch(err){
         res.json({ok:false,err})
     }
