@@ -1,4 +1,7 @@
 const execa = require("execa");
+const path = require("path");
+const fs = require("fs");
+const { Buffer } = require("buffer")
 
 const keycode = [
     "UNKNOWN", 
@@ -111,7 +114,8 @@ async function text(text){
                 "shell",
                 "input",
                 "keyboard",
-                text
+                "text",
+                `\'${text}\'`
             ])
             return stdout;
         }else throw {err:"require string"}
@@ -120,9 +124,19 @@ async function text(text){
     }
 }
 
+async function screencap(){
+    const { stdout } = await execa("adb",[
+        "exec-out",
+        "screencap",
+        // "-p",
+    ])
+    return stdout;
+}
+
 module.exports = {
     input:{
         key,
         text
-    }
+    },
+    screencap
 };
