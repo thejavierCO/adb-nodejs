@@ -1,7 +1,7 @@
 const execa = require("execa");
 const path = require("path");
 const fs = require("fs");
-const { Buffer } = require("buffer")
+const axios = require("axios");
 
 const keycode = [
     "UNKNOWN", 
@@ -131,11 +131,15 @@ async function screencap(){
             "screencap",
             "-p",
             "sdcard/s.png"
-        ]);
-        await execa("adb",["pull","sdcard/s.png",path.resolve("s.png")])
+        ])
+        .then(async _=>await execa("adb",["pull","sdcard/s.png",path.resolve("s.png")]))
+        .catch(async e=>{
+            if(e.stderr){return await axios.get("http://http.cat/404").then(e=>e.data)}
+        }).then(e=>fs.appendFile(path.resolve("s.png"),e,err=>{console.log(err)}))
         return fs.readFileSync(path.resolve("s.png"));
-    }finally{
-        fs.rmSync(path.resolve("s.png"));
+    }
+    finally{
+        // fs.rmSync(path.resolve("s.png"));
     }
 }
 
