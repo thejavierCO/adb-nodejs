@@ -133,13 +133,13 @@ async function screencap(){
             "sdcard/s.png"
         ])
         .then(async _=>await execa("adb",["pull","sdcard/s.png",path.resolve("s.png")]))
-        .catch(async e=>{
-            if(e.stderr){return await axios.get("http://http.cat/404").then(e=>e.data)}
-        }).then(e=>fs.appendFile(path.resolve("s.png"),e,err=>{console.log(err)}))
+        // .catch(async e=>{
+        //     if(e.stderr){return await axios.get("http://http.cat/404").then(e=>e.data)}
+        // }).then(e=>fs.appendFile(path.resolve("s.png"),e,err=>{console.log(err)}))
         return fs.readFileSync(path.resolve("s.png"));
     }
     finally{
-        // fs.rmSync(path.resolve("s.png"));
+        fs.rmSync(path.resolve("s.png"));
     }
 }
 
